@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+qsvm4eo = "qkernel"
+
+[project]
+name = "qkernel"
+description = "Kernel Methods for Quantum Computing"
+readme = "README.md"
+authors = [
+    {name = "Sherry Blair", email = "sherry.blair@ichec.ie"},
+    {name = "Emil Dimitrov", email = "emil.dimitrov@ichec.ie"},
+    {name = "James Nelson", email = "james.nelson@ichec.ie"},
+    {name = "Pablo Suárez Vieites", email = "pablo.suarez@ichec.ie"}
+    ]
+version = "0.0.1"
+requires-python = ">=3.8"
+dependencies = [
+    "matplotlib",
+    "myqlm",
+    "numpy",
+    "qutip",
+    "scipy",
+    "scikit-learn"
+]
+
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, isort rules
+
+
+[dependency-groups]
+dev = [
+    "ruff",
+    "ipykernel"
+]
