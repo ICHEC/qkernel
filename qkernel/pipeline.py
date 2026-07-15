@@ -32,19 +32,17 @@ class Pipeline:
 
     def __init__(
         self,
-        args: dict,
         qbits_train: np.ndarray,
         qbits_test: np.ndarray,
         y_train: np.ndarray,
         y_test: np.ndarray,
+        args: dict
     ):
         """
         Initialize pipeline with configuration arguments and qbit data.
 
         Parameters
         ----------
-        args : dict
-            Dictionary containing all pipeline configuration parameters.
         qbits_train : np.ndarray
             Training qbit array.
         qbits_test : np.ndarray
@@ -53,13 +51,15 @@ class Pipeline:
             Training labels.
         y_test : np.ndarray
             Test labels.
+        args : dict
+            Dictionary containing all pipeline configuration parameters.
         """
-        self.args = args
         self.qbits_train = qbits_train
         self.qbits_test = qbits_test
         self.y_train = y_train
         self.y_test = y_test
-
+        self.args = args
+        
     def run(self):
         """
         Execute the full pipeline end-to-end.
