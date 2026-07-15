@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List, Tuple, Union, Any
+from typing import Any, List, Tuple
 
 import numpy as np
 import qutip

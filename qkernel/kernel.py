@@ -1,8 +1,8 @@
-import numpy as np
-from scipy.spatial import distance
-from typing import Callable, Optional, Dict
+from typing import Dict, Optional
 
+import numpy as np
 from qsvm4eo.utils import compute_excitation_count
+from scipy.spatial import distance
 
 
 def exponential_jensen_shannon_distance(

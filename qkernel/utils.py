@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def compute_excitation_count(probs: np.ndarray) -> np.ndarray:
     """
     Convert probability distributions into excitation-count representations.
