@@ -16,7 +16,7 @@ class Hamiltonian(ABC):
 
     def __init__(
         self,
-        qbits_list: List[np.ndarray],
+        qbits: np.ndarray,
         omega: float = 2 * np.pi,
         delta: float = 0,
         c6: float = 865723.02,
@@ -27,8 +27,8 @@ class Hamiltonian(ABC):
 
         Parameters
         ----------
-        qbits_list : list
-            List of qbit configurations.
+        qbits : np.ndarray
+            Array of qbit configurations, shape (N, nqbits, dim).
         omega : float, optional
             Driving term strength (default is 2π).
         delta : float, optional
@@ -36,8 +36,8 @@ class Hamiltonian(ABC):
         c6 : float, optional
             Interaction coefficient (default is 865723.02).
         """
-        self.qbits_list = qbits_list
-        self.nqbits = len(qbits_list[0])
+        self.qbits_list = qbits
+        self.nqbits = qbits.shape[1]
         self.omega = omega
         self.delta = delta
         self.c6 = c6
@@ -125,12 +125,14 @@ class MyQLMHamiltonian(Hamiltonian):
             pauli_terms=[Term(0.5, "X", [i]) for i in range(self.nqbits)],
         )
 
-        detuning_term = sum(self._occupation_operator(i) for i in range(self.nqbits))
+        occupation_ops = [self._occupation_operator(i) for i in range(self.nqbits)]
+        detuning_term = sum(occupation_ops)
+
+        diff = qbits[:, None, :] - qbits[None, :, :]
+        inv_dist6 = 1 / np.sum(diff**2, axis=-1) ** 3
 
         interaction_term = sum(
-            (1 / np.linalg.norm(qbits[i] - qbits[j]) ** 6)
-            * self._occupation_operator(i)
-            * self._occupation_operator(j)
+            inv_dist6[i, j] * occupation_ops[i] * occupation_ops[j]
             for i in range(self.nqbits - 1)
             for j in range(i + 1, self.nqbits)
         )
@@ -197,18 +199,20 @@ class QuTiPHamiltonian(Hamiltonian):
         qutip.Qobj
             Full Hamiltonian operator.
         """
+        num_ops = [self._qutip_op(i, qutip.num(2)) for i in range(self.nqbits)]
+
         H = sum(
             self.omega * 0.5 * self._qutip_op(i, qutip.sigmax())
             for i in range(self.nqbits)
         )
 
-        H -= sum(
-            self.delta * self._qutip_op(i, qutip.num(2)) for i in range(self.nqbits)
-        )
+        H -= sum(self.delta * op for op in num_ops)
+
+        diff = qbits[:, None, :] - qbits[None, :, :]
+        inv_dist6 = 1 / np.sum(diff**2, axis=-1) ** 3
 
         H += sum(
-            (self.c6 / np.linalg.norm(qbits[i] - qbits[j]) ** 6)
-            * self._qutip_op(i, qutip.num(2), j, qutip.num(2))
+            (self.c6 * inv_dist6[i, j]) * (num_ops[i] * num_ops[j])
             for i in range(self.nqbits - 1)
             for j in range(i + 1, self.nqbits)
         )

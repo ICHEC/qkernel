@@ -1,7 +1,7 @@
 from typing import Dict, Optional
 
 import numpy as np
-from qsvm4eo.utils import compute_excitation_count
+from qkernel.utils import compute_excitation_count
 from scipy.spatial import distance
 
 
