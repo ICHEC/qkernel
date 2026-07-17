@@ -2,10 +2,11 @@ from abc import ABC, abstractmethod
 from typing import List, Union
 
 import numpy as np
-import qkernel
 import qutip
 from qat.core import Batch, Schedule
 from qlmaas.qpus import AnalogQPU
+
+from .hamiltonian import Hamiltonian
 
 
 class Simulator(ABC):
@@ -18,7 +19,7 @@ class Simulator(ABC):
 
     def __init__(
         self,
-        hamiltonians_list: List[qkernel.hamiltonian.Hamiltonian],
+        hamiltonians_list: List[Hamiltonian],
         duration: float = 0.66,
     ) -> None:
         """
@@ -57,7 +58,7 @@ class MyQLMSimulator(Simulator):
 
     def __init__(
         self,
-        hamiltonians_list: List[qkernel.hamiltonian.Hamiltonian],
+        hamiltonians_list: List[Hamiltonian],
         duration: float = 0.66,
     ) -> None:
         """

@@ -3,19 +3,24 @@ import os
 import time
 
 import numpy as np
-import qkernel
+
+from .kernel import Kernel
+from .hamiltonian import MyQLMHamiltonian, QuTiPHamiltonian
+from .model import SVM
+from .simulator import MyQLMSimulator, QuTiPSimulator
+
 
 HAMILTONIANS_DICT = {
-    "myqlm": qkernel.hamiltonian.MyQLMHamiltonian,
-    "qutip": qkernel.hamiltonian.QuTiPHamiltonian,
+    "myqlm": MyQLMHamiltonian,
+    "qutip": QuTiPHamiltonian,
 }
 
 SIMULATORS_DICT = {
-    "myqlm": qkernel.simulator.MyQLMSimulator,
-    "qutip": qkernel.simulator.QuTiPSimulator,
+    "myqlm": MyQLMSimulator,
+    "qutip": QuTiPSimulator,
 }
 
-MODELS_DICT = {"svc": qkernel.model.SVM}
+MODELS_DICT = {"svc": SVM}
 
 
 class Pipeline:
@@ -127,7 +132,7 @@ class Pipeline:
         - Training Gram matrix
         - Test Gram matrix
         """
-        kernel = qkernel.kernel.Kernel(
+        kernel = Kernel(
             self.probabilities_train,
             self.probabilities_test,
             **self.args["kernel"].get("kwargs") or {},
