@@ -2,8 +2,8 @@
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools.package-dir]
-qkernel = "qkernel"
+[tool.setuptools.packages.find]
+include = ["qkernel*"]
 
 [project]
 name = "qkernel"
@@ -20,6 +20,8 @@ requires-python = ">=3.8"
 dependencies = [
     "myqlm",
     "numpy",
+    "pandas",
+    "qkernel4eo",
     "qutip",
     "scipy",
     "scikit-learn"
@@ -32,6 +34,8 @@ line-length = 88
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, isort rules
 
+[tool.uv.sources]
+qkernel4eo = { git = "ssh://git@github.com/ICHEC/qkernel4eo.git" }
 
 [dependency-groups]
 dev = [
