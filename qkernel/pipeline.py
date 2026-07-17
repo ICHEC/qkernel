@@ -4,11 +4,10 @@ import time
 
 import numpy as np
 
-from .kernel import Kernel
 from .hamiltonian import MyQLMHamiltonian, QuTiPHamiltonian
+from .kernel import Kernel
 from .model import SVM
 from .simulator import MyQLMSimulator, QuTiPSimulator
-
 
 HAMILTONIANS_DICT = {
     "myqlm": MyQLMHamiltonian,
@@ -64,7 +63,7 @@ class Pipeline:
         self.y_train = y_train
         self.y_test = y_test
         self.args = args
-        
+
     def run(self):
         """
         Execute the full pipeline end-to-end.

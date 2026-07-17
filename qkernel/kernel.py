@@ -1,8 +1,9 @@
 from typing import Dict, Optional
 
 import numpy as np
-from .utils import compute_excitation_count
 from scipy.spatial import distance
+
+from .utils import compute_excitation_count
 
 
 def exponential_jensen_shannon_distance(
