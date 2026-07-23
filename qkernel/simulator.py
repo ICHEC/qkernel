@@ -8,18 +8,13 @@ from qat.core import Batch, Schedule
 from .hamiltonian import Hamiltonian
 
 
-qlmaas_available = False
-
-
 try:
     import qlmaas.qpus
 
-    if hasattr(qlmaas.qpus, "AnalogQPU"):
-        AQPU_remote = qlmaas.qpus.AnalogQPU()
-        qlmaas_available = True
-    else:
-        AQPU_remote = None
-except (ModuleNotFoundError, ImportError):
+    AQPU_remote = qlmaas.qpus.AnalogQPU()
+    qlmaas_available = True
+except:
+    AQPU_remote = None
     qlmaas_available = False
 
 
