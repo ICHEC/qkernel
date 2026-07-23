@@ -15,7 +15,7 @@ try:
     import qlmaas.qpus
 
     if hasattr(qlmaas.qpus, "AnalogQPU"):
-        AQPU_remote = qlmaas.qpus.AnalogQPU
+        AQPU_remote = qlmaas.qpus.AnalogQPU()
         qlmaas_available = True
     else:
         AQPU_remote = None
