@@ -4,9 +4,18 @@ from typing import List, Union
 import numpy as np
 import qutip
 from qat.core import Batch, Schedule
-from qlmaas.qpus import AnalogQPU
 
 from .hamiltonian import Hamiltonian
+
+
+try:
+    import qlmaas.qpus
+
+    AQPU_remote = qlmaas.qpus.AnalogQPU()
+    qlmaas_available = True
+except:
+    AQPU_remote = None
+    qlmaas_available = False
 
 
 class Simulator(ABC):
@@ -72,7 +81,7 @@ class MyQLMSimulator(Simulator):
             Evolution time for analog simulation.
         """
         self.hamiltonians_list = hamiltonians_list
-        self.my_qpu = AnalogQPU()
+        self.my_qpu = AQPU_remote
         self.duration = duration
 
     def _create_jobs(self) -> None:
