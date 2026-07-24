@@ -49,7 +49,7 @@ class Kernel:
         p_train: np.ndarray,
         p_test: np.ndarray,
         excitations: bool = True,
-        distance_fn: Callable = DISTANCES_DICT["exp_js"],
+        distance_fn: str = "exp_js",
         distance_kwargs: Optional[Dict[str, float]] = None,
     ) -> None:
         """
@@ -64,9 +64,8 @@ class Kernel:
         excitations : bool, optional
             If True, transforms probability vectors into excitation-count
             representations before computing kernels.
-        distance_fn : callable, optional
-            Function that computes similarity between two probability vectors.
-            Expected signature: distance_fn(pi, pj, **kwargs) -> float.
+        distance_fn : str, optional
+            Key selecting the distance function from DISTANCES_DICT
         distance_kwargs : dict or None, optional
             Additional keyword arguments passed to the distance function.
         """
