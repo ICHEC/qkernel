@@ -20,7 +20,7 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
    uv sync
    \`\`\`
 
-   > Note: `qkernel4eo` is installed directly from its private GitHub repo over SSH, so make sure your SSH key is set up with GitHub before running `uv sync`.
+   > Note: One of the packages in .toml file, `qkernel4eo` is installed directly from its private GitHub repo over SSH, so make sure your SSH key is set up with GitHub before running `uv sync`.
 
 3. Run commands within the environment using `uv run`, e.g.:
    \`\`\`bash
