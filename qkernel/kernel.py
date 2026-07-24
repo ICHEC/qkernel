@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Callable, Dict, Optional
 
 import numpy as np
 from scipy.spatial import distance
@@ -49,7 +49,7 @@ class Kernel:
         p_train: np.ndarray,
         p_test: np.ndarray,
         excitations: bool = True,
-        distance_fn: str = DISTANCES_DICT["exp_js"],
+        distance_fn: Callable = DISTANCES_DICT["exp_js"],
         distance_kwargs: Optional[Dict[str, float]] = None,
     ) -> None:
         """
