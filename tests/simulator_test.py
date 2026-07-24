@@ -12,10 +12,12 @@ RNG = np.random.default_rng(42)
 N_QBITS = 3
 BANDS = RNG.random((2, N_QBITS))
 
-QBITS_LIST = [
-    RadialEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
-    ChainEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
-]
+QBITS_LIST = np.array(
+    [
+        RadialEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
+        ChainEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
+    ]
+)  # stacked to shape (N, N_QBITS, 2) since Hamiltonian.__init__ reads qbits.shape[1]
 
 HAMILTONIANS_LIST = QuTiPHamiltonian(QBITS_LIST).generate_hamiltonians_list()
 
@@ -43,7 +45,7 @@ def test_evolve_hamiltonian_returns_array(simulator):
 
 def test_evolve_hamiltonian_shape(simulator):
     result = simulator._evolve_hamiltonian(HAMILTONIANS_LIST[0])
-    assert result.shape == (2**N_QBITS,)
+    assert result.flatten().shape == (2**N_QBITS,)
 
 
 def test_get_probabilities_list_length(simulator):

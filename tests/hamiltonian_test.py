@@ -13,10 +13,12 @@ RNG = np.random.default_rng(42)
 N_QBITS = 3
 BANDS = RNG.random((2, N_QBITS))
 
-QBITS_LIST = [
-    RadialEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
-    ChainEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
-]
+QBITS_LIST = np.array(
+    [
+        RadialEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
+        ChainEmbedding(BANDS).embed()[0],  # shape (N_QBITS, 2)
+    ]
+)  # stacked to shape (N, N_QBITS, 2) since Hamiltonian.__init__ reads qbits.shape[1]
 
 
 @pytest.fixture
@@ -56,26 +58,26 @@ def test_generate_hamiltonians_list_length(myqlm):
 
 
 def test_myqlm_returns_three_terms(myqlm):
-    result = myqlm.generate_hamiltonian(QBITS_LIST[0])
+    result = myqlm.generate_single_hamiltonian(QBITS_LIST[0])
     assert len(result) == 3
 
 
 def test_myqlm_coefficients(myqlm):
-    result = myqlm.generate_hamiltonian(QBITS_LIST[0])
+    result = myqlm.generate_single_hamiltonian(QBITS_LIST[0])
     assert result[0][0] == myqlm.omega
     assert result[1][0] == -myqlm.delta
     assert result[2][0] == myqlm.c6
 
 
 def test_myqlm_terms_are_observables(myqlm):
-    result = myqlm.generate_hamiltonian(QBITS_LIST[0])
+    result = myqlm.generate_single_hamiltonian(QBITS_LIST[0])
     for _, obs in result:
         assert isinstance(obs, Observable)
 
 
 def test_myqlm_custom_parameters():
     h = MyQLMHamiltonian(QBITS_LIST, omega=1.0, delta=0.5, c6=100.0)
-    result = h.generate_hamiltonian(QBITS_LIST[0])
+    result = h.generate_single_hamiltonian(QBITS_LIST[0])
     assert result[0][0] == 1.0
     assert result[1][0] == -0.5
     assert result[2][0] == 100.0
@@ -85,18 +87,18 @@ def test_myqlm_custom_parameters():
 
 
 def test_qutip_returns_qobj(qutip_h):
-    result = qutip_h.generate_hamiltonian(QBITS_LIST[0])
+    result = qutip_h.generate_single_hamiltonian(QBITS_LIST[0])
     assert isinstance(result, qutip.Qobj)
 
 
 def test_qutip_hamiltonian_shape(qutip_h):
-    result = qutip_h.generate_hamiltonian(QBITS_LIST[0])
+    result = qutip_h.generate_single_hamiltonian(QBITS_LIST[0])
     dim = 2**N_QBITS
     assert result.shape == (dim, dim)
 
 
 def test_qutip_hamiltonian_is_hermitian(qutip_h):
-    result = qutip_h.generate_hamiltonian(QBITS_LIST[0])
+    result = qutip_h.generate_single_hamiltonian(QBITS_LIST[0])
     assert result.isherm
 
 
