@@ -95,7 +95,7 @@ class Pipeline:
         for both train and test datasets.
         """
         for dataset_type in ["train", "test"]:
-            qbits = getattr(self, f"qbits_{dataset_type}")
+            qbits = getattr(self, f"x_{dataset_type}")
             hamiltonian = self.hamiltonian_cls(
                 qbits, **self.args["hamiltonian"].get("kwargs") or {}
             )
