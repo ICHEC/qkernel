@@ -23,8 +23,8 @@ dependencies = [
     "pandas",
     "qkernel4eo",
     "qutip",
-    "scipy",
-    "scikit-learn"
+    "scikit-learn",
+    "scipy"
 ]
 
 
@@ -39,6 +39,7 @@ qkernel4eo = { git = "ssh://git@github.com/ICHEC/qkernel4eo.git" }
 
 [dependency-groups]
 dev = [
+    "ipykernel",
+    "pytest",
     "ruff",
-    "ipykernel"
 ]
