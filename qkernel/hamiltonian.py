@@ -184,7 +184,6 @@ class QuTiPHamiltonian(Hamiltonian):
             ops[j] = op_j
         return qutip.tensor(ops)
 
-
     def generate_single_hamiltonian(self, qbits: np.ndarray) -> qutip.Qobj:
         """
         Construct full QuTiP Hamiltonian for a single configuration.
