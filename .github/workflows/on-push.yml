@@ -3,7 +3,7 @@
 
 name: Python Lint and Format
 
-# Run on every push to any branch, and on pull requests.
+# Run on every push to any branch.
 on:
   push:
   workflow_dispatch: # lets you trigger it manually from the Actions tab
@@ -25,7 +25,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
         enable-cache: true  # Automatically caches your dependencies
 
-    # 2. Install qse using uv
+    # 2. Install using uv
     - name: Install qkernel and testing dependencies
       run: |
         uv sync --dev
