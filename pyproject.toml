@@ -21,10 +21,9 @@ dependencies = [
     "myqlm",
     "numpy",
     "pandas",
-    "qkernel4eo",
     "qutip",
     "scipy",
-    "scikit-learn"
+    "scikit-learn",
 ]
 
 
@@ -33,9 +32,6 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, isort rules
-
-[tool.uv.sources]
-qkernel4eo = { git = "ssh://git@github.com/ICHEC/qkernel4eo.git" }
 
 [dependency-groups]
 dev = [
