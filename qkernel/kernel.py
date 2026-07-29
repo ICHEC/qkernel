@@ -47,8 +47,6 @@ class Kernel:
     def __init__(
         self,
         p_train: np.ndarray,
-        p_test: np.ndarray,
-        excitations: bool = True,
         distance_fn: str = "exp_js",
         distance_kwargs: Optional[Dict[str, float]] = None,
     ) -> None:
@@ -59,11 +57,6 @@ class Kernel:
         ----------
         p_train : np.ndarray
             Training probability distributions of shape (n_train, 2^n_features).
-        p_test : np.ndarray
-            Test probability distributions of shape (n_test, 2^n_features).
-        excitations : bool, optional
-            If True, transforms probability vectors into excitation-count
-            representations before computing kernels.
         distance_fn : str, optional
             Key selecting the distance function from DISTANCES_DICT
         distance_kwargs : dict or None, optional
@@ -71,16 +64,8 @@ class Kernel:
         """
         self.distance_fn = DISTANCES_DICT[distance_fn]
         self.distance_kwargs = distance_kwargs or {}
-
-        if excitations:
-            self.p_train = compute_excitation_count(p_train)
-            self.p_test = compute_excitation_count(p_test)
-        else:
-            self.p_train = p_train
-            self.p_test = p_test
-
+        self.p_train = p_train
         self.n_train = len(self.p_train)
-        self.n_test = len(self.p_test)
 
     def compute_gram_train(self) -> np.ndarray:
         """
@@ -105,10 +90,14 @@ class Kernel:
 
         return gram_train
 
-    def compute_gram_test(self) -> np.ndarray:
+    def compute_gram_test(self, p_test: np.ndarray,) -> np.ndarray:
         """
         Compute the Gram (kernel) matrix between test and training sets.
 
+        Parameters
+        ----------
+        p_test : np.ndarray
+            Test probability distributions of shape (n_test, 2^n_features).
 
         Returns
         -------
@@ -117,12 +106,13 @@ class Kernel:
             corresponds to the kernel value between test sample i and
             training sample j.
         """
-        gram_test: np.ndarray = np.ones((self.n_test, self.n_train))
+        n_test = len(p_test)
+        gram_test: np.ndarray = np.ones((n_test, self.n_train))
 
-        for i in range(self.n_test):
+        for i in range(n_test):
             for j in range(self.n_train):
                 gram_test[i, j] = self.distance_fn(
-                    self.p_test[i],
+                    p_test[i],
                     self.p_train[j],
                     **self.distance_kwargs,
                 )
