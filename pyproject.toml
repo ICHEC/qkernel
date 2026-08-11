@@ -24,6 +24,7 @@ dependencies = [
     "qutip",
     "scipy",
     "scikit-learn",
+    "qkernel4eo",
 ]
 
 
@@ -32,6 +33,9 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, isort rules
+
+[tool.uv.sources]
+qkernel4eo = { git = "https://github.com/ICHEC/qkernel4eo" }
 
 [dependency-groups]
 dev = [
