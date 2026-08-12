@@ -16,15 +16,15 @@ authors = [
     {name = "Pablo Suárez Vieites", email = "pablo.suarez@ichec.ie"}
     ]
 version = "0.0.1"
-requires-python = ">=3.8"
+requires-python = ">=3.12"
 dependencies = [
     "myqlm",
     "numpy",
     "pandas",
-    "qkernel4eo",
     "qutip",
     "scipy",
-    "scikit-learn"
+    "scikit-learn",
+    "qkernel4eo",
 ]
 
 
@@ -35,7 +35,7 @@ line-length = 88
 select = ["E", "F", "W", "I"]  # pycodestyle, pyflakes, isort rules
 
 [tool.uv.sources]
-qkernel4eo = { git = "ssh://git@github.com/ICHEC/qkernel4eo.git" }
+qkernel4eo = { git = "https://github.com/ICHEC/qkernel4eo" }
 
 [dependency-groups]
 dev = [

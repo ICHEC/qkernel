@@ -1,4 +1,4 @@
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
 
 import numpy as np
 from scipy.spatial import distance

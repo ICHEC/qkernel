@@ -1,0 +1,37 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: Python Lint and Format
+
+# Run on every push to any branch.
+on:
+  push:
+  workflow_dispatch: # lets you trigger it manually from the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+
+    steps:
+    - uses: actions/checkout@v6
+    # 1. Install uv (much faster than actions/setup-python)
+    - name: Install uv
+      uses: astral-sh/setup-uv@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        enable-cache: true  # Automatically caches your dependencies
+
+    # 2. Install using uv
+    - name: Install qkernel and testing dependencies
+      run: |
+        uv sync --dev
+
+    # 3. Lint & Format
+    - name: Lint and Format with Ruff
+      run: |
+        uv run ruff check . --output-format github
+        uv run ruff format --check .

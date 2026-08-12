@@ -40,7 +40,7 @@ class Pipeline:
         x_test: np.ndarray,
         y_train: np.ndarray,
         y_test: np.ndarray,
-        args: dict
+        args: dict,
     ):
         """
         Initialize pipeline with configuration arguments and qbit data.
