@@ -1,4 +1,11 @@
 # qkernel
+
+**⚠️ Repository no longer maintained**
+>
+> This repository is no longer actively maintained. Development has moved to the new repository: [ICHEC/qc4ml](https://github.com/ICHEC/qc4ml).
+>
+> Please refer to the new repository for the latest version, updates and documentation.
+
 `qkernel` is a package for running quantum kernel models.
 
 The quantum kernel is based on a analogue computing framework as introduced by Henry et al. (for details see [here](https://arxiv.org/pdf/2107.03247) and [here](https://journals.aps.org/pra/abstract/10.1103/PhysRevA.107.042615)). 
