@@ -1,12 +1,13 @@
 import collections as col
 import random as rd
-from typing import List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.colors import ListedColormap
+from scipy.spatial.distance import pdist
 
 
 def compute_excitation_count(probs: np.ndarray) -> np.ndarray:
@@ -187,3 +188,48 @@ def plot_label_grid_with_points(
                 plt.gca().add_patch(rect)
 
     plt.show()
+
+
+def check_embeddability(
+    graph_list: Union[np.ndarray, List[np.ndarray]],
+    max_atoms: int = 80,
+    max_distance_from_origin: float = 38.0,
+    min_distance_between_atoms: float = 5.0,
+) -> Dict[int, List[int]]:
+    """
+    Check whether a list of atom position graphs are embeddable on the AnalogQPU.
+
+    Parameters
+    ----------
+    graph_list : np.ndarray or list of np.ndarray
+        List of N graphs, each of shape (n_atoms, 2) representing atom
+        coordinates in µm.
+    max_atoms : int
+        Maximum number of atoms allowed in a single register.
+    max_distance_from_origin : float
+        Maximum allowed distance (µm) of any atom from the origin.
+    min_distance_between_atoms : float
+        Minimum allowed distance (µm) between any pair of atoms.
+
+    Returns
+    -------
+    dict[int, list[int]]
+        Dictionary mapping graph index to its violated constraints:
+        0 (too many atoms), 1 (too far from the origin) and 2 (atoms too close).
+        An empty dict means all graphs are embeddable.
+    """
+    failed_clauses = {}
+    for i, graph in enumerate(graph_list):
+        violations = []
+        # 1. Maximum atom number
+        if len(graph) > max_atoms:
+            violations.append(0)
+        # 2. Distance from origin
+        if np.any(np.linalg.norm(graph, axis=1) > max_distance_from_origin):
+            violations.append(1)
+        # 3. Distance between atoms
+        if np.any(pdist(graph, metric="euclidean") < min_distance_between_atoms):
+            violations.append(2)
+        if violations:
+            failed_clauses[i] = violations
+    return failed_clauses
