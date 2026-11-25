@@ -1,8 +1,12 @@
 import collections as col
 import random as rd
-from typing import List, Union
+from typing import List, Optional, Tuple, Union
 
+import matplotlib.patches as mpatches
+import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+from matplotlib.colors import ListedColormap
 
 
 def compute_excitation_count(probs: np.ndarray) -> np.ndarray:
@@ -82,3 +86,104 @@ def normalise_array(x: np.ndarray, n: int = 1, axis: int = 0) -> np.ndarray:
     x_min = np.min(x, axis=axis, keepdims=True)
     x_normalised = ((x - x_min) / (x_max - x_min)) * n
     return x_normalised
+
+
+def plot_label_grid_with_points(
+    df: pd.DataFrame,
+    label_col: str = "label",
+    lat_col: str = "lat_rank",
+    lon_col: str = "lon_rank",
+    label_names: Optional[List[str]] = None,
+    cmap_name: str = "tab10",
+    point_color: str = "black",
+    point_size: int = 20,
+    figsize: Tuple[float, float] = (8, 8),
+    legend_loc: str = "upper left",
+    draw_squares: bool = False,
+    n_convoluted_side: int = 2,
+) -> None:
+    """
+    Plots a categorical label grid with overlaid scatter points.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        DataFrame containing label, latitude rank and longitude rank columns,
+        sorted by latitude rank and then longitude rank. The points must lie
+        on a square grid, as in the `df` attribute of `ConvolutionalEncoding`.
+    label_col : str
+        Name of the column containing label values, which must start at 1.
+    lat_col : str
+        Name of the column containing latitude ranks.
+    lon_col : str
+        Name of the column containing longitude ranks.
+    label_names : list of str
+        Names of the categories, in the order of numeric labels.
+    cmap_name : str
+        Name of the matplotlib colormap to use for categories.
+    point_color : str
+        Color of the scatter points.
+    point_size : int
+        Size of the scatter points.
+    figsize : tuple
+        Figure size.
+    legend_loc : str
+        Location of the legend.
+    draw_squares : bool
+        Whether to outline the blocks of points used by the convolution.
+    n_convoluted_side : int
+        Number of points on each side of the outlined blocks.
+    """
+    # Prepare the label grid
+    num_points_per_side = int(np.sqrt(len(df)))  # assumes square grid
+    label_grid = (
+        df[label_col].to_numpy().reshape(num_points_per_side, num_points_per_side)
+    )
+
+    # Map labels to colors
+    cmap = plt.get_cmap(cmap_name)
+    num_labels = int(df[label_col].max())  # assumes labels start at 1
+    colors = [cmap(i) for i in range(num_labels)]
+    color_indices = label_grid - 1  # map label 1->0, 2->1, etc.
+
+    # Plot the grid
+    plt.figure(figsize=figsize)
+    plt.imshow(
+        color_indices,
+        origin="lower",
+        cmap=ListedColormap(colors),
+        vmin=-0.5,
+        vmax=num_labels - 0.5,
+    )
+    plt.xlabel("Longitude Rank")
+    plt.ylabel("Latitude Rank")
+    plt.title("Label Grid")
+
+    # Add legend
+    if label_names is None:
+        label_names = [f"Label {i + 1}" for i in range(num_labels)]
+    legend_handles = [
+        mpatches.Patch(color=colors[i], label=label_names[i]) for i in range(num_labels)
+    ]
+    plt.legend(handles=legend_handles, loc=legend_loc)
+
+    # Scatter points
+    lat = df[lat_col].to_numpy()
+    lon = df[lon_col].to_numpy()
+    plt.scatter(lon, lat, color=point_color, s=point_size, edgecolor="white")
+
+    if draw_squares:
+        # Outline each block of the grid
+        for i in range(0, num_points_per_side, n_convoluted_side):
+            for j in range(0, num_points_per_side, n_convoluted_side):
+                rect = mpatches.Rectangle(
+                    (j, i),  # bottom-left corner
+                    n_convoluted_side - 1,
+                    n_convoluted_side - 1,
+                    linewidth=2,
+                    edgecolor="black",
+                    facecolor="none",
+                )
+                plt.gca().add_patch(rect)
+
+    plt.show()

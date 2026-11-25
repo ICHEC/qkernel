@@ -1,9 +1,10 @@
 import json
 import os
 import time
-from typing import Optional
+from typing import Optional, Type, Union
 
 import numpy as np
+import pandas as pd
 
 from .encodings import Encoding
 from .hamiltonian import MyQLMHamiltonian, QuTiPHamiltonian
@@ -32,38 +33,42 @@ class Pipeline:
     Data encoding → Hamiltonian construction → quantum simulation →
     kernel computation → classical model training → evaluation and saving results.
 
-    Data is supplied as encodings, which the pipeline turns into qubit
-    coordinates.
+    A single encoding is supplied, which the pipeline applies to both the train
+    and test data to turn them into qubit coordinates.
     """
 
     def __init__(
         self,
-        encoding_train: Encoding,
-        encoding_test: Encoding,
+        encoding: Type[Encoding],
+        data_train: Union[np.ndarray, pd.DataFrame],
+        data_test: Union[np.ndarray, pd.DataFrame],
         y_train: Optional[np.ndarray],
         y_test: Optional[np.ndarray],
         args: dict,
     ):
         """
-        Initialize pipeline with configuration arguments and data encodings.
+        Initialize pipeline with an encoding, data and configuration arguments.
 
         Parameters
         ----------
-        encoding_train : Encoding
-            Encoding of the training data.
-        encoding_test : Encoding
-            Encoding of the test data.
+        encoding : type
+            Encoding class (a subclass of `Encoding`) applied to both datasets.
+        data_train : np.ndarray or pd.DataFrame
+            Training data, of the type expected by the encoding.
+        data_test : np.ndarray or pd.DataFrame
+            Test data, of the type expected by the encoding.
         y_train : np.ndarray or None
-            Training labels. If None, the labels produced by `encoding_train`
+            Training labels. If None, the labels produced by the encoding
             are used.
         y_test : np.ndarray or None
-            Test labels. If None, the labels produced by `encoding_test`
+            Test labels. If None, the labels produced by the encoding
             are used.
         args : dict
             Dictionary containing all pipeline configuration parameters.
         """
-        self.encoding_train = encoding_train
-        self.encoding_test = encoding_test
+        self.encoding_cls = encoding
+        self.data_train = data_train
+        self.data_test = data_test
         self.y_train = y_train
         self.y_test = y_test
         self.args = args
@@ -108,7 +113,7 @@ class Pipeline:
         kwargs = (self.args.get("encoding") or {}).get("kwargs") or {}
 
         for dataset_type in ["train", "test"]:
-            encoding = getattr(self, f"encoding_{dataset_type}")
+            encoding = self.encoding_cls(getattr(self, f"data_{dataset_type}"))
             qbits = encoding.encode(**kwargs)
 
             labels = getattr(self, f"y_{dataset_type}")
@@ -117,7 +122,7 @@ class Pipeline:
             if labels is None:
                 raise ValueError(
                     f"y_{dataset_type} is required: "
-                    f"{type(encoding).__name__} does not produce labels."
+                    f"{self.encoding_cls.__name__} does not produce labels."
                 )
             if len(labels) != len(qbits):
                 raise ValueError(

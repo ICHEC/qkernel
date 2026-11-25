@@ -2015,6 +2015,7 @@ name = "qkernel"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "matplotlib" },
     { name = "myqlm" },
     { name = "numpy" },
     { name = "pandas" },
@@ -2032,6 +2033,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "matplotlib" },
     { name = "myqlm" },
     { name = "numpy" },
     { name = "pandas" },
