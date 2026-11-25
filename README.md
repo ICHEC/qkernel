@@ -20,8 +20,6 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
    uv sync
    \`\`\`
 
-   > Note: One of the packages in .toml file, `qkernel4eo` is installed directly from its private GitHub repo over SSH, so make sure your SSH key is set up with GitHub before running `uv sync`.
-
 3. Run commands within the environment using `uv run`, e.g.:
    \`\`\`bash
    uv run pytest
@@ -33,6 +31,7 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
 The source code is contained in `qkernel`. Some of the more important files in there are: 
 
 
+- `encodings/`: Classes for encoding data into qubit positions (chain, radial and convolutional encodings). 
 - `hamiltonian.py`: Class for hamiltonian construction out of graphs. 
 - `kernel.py`: Class for generating kernels out of probability distributions.
 - `model.py`: Class for implementing kernel models. 
@@ -40,6 +39,8 @@ The source code is contained in `qkernel`. Some of the more important files in t
 Tutorial on how to use the pipeline can be found in [here](docs/tutorials/pipeline.ipynb).
 - `simulator.py`: Class for simulating neutral atom devices. 
 - `utils.py`: Class with different utility functions.
+
+Example Earth observation datasets can be found in `datasets`.
 
 ### Analogue Quantum Kernel
 

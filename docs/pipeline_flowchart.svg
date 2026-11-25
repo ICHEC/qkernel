@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -0 480 1378" width="480" height="1378" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect width="100%" height="100%" fill="#fff"/>
+<rect x="100" y="20" width="280" height="44" rx="22" fill="#fff" stroke="#e8833a" stroke-width="2"/>
+<text x="240" y="47.0" text-anchor="middle" font-size="13">Start</text>
+<polyline points="240,64 240,104" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="90,112 390,104 390,168 90,168" fill="#fff" stroke="#000" stroke-width="2"/>
+<text x="240" y="136.0" text-anchor="middle" font-size="13">x_train, x_test, y_train, y_test</text>
+<text x="240" y="152.0" text-anchor="middle" font-size="13">args (config dict)</text>
+<polyline points="240,168 240,208" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="208" width="280" height="50" fill="#fff" stroke="#999" stroke-width="2"/>
+<text x="240" y="230.0" text-anchor="middle" font-size="13">hamiltonian_cls =</text>
+<text x="240" y="246.0" text-anchor="middle" font-size="13">HAMILTONIANS_DICT[backend]</text>
+<polyline points="240,258 240,296" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="296" width="280" height="60" fill="#fff" stroke="#1fa65a" stroke-width="2"/>
+<line x1="114" y1="296" x2="114" y2="356" stroke="#1fa65a" stroke-width="2"/>
+<line x1="366" y1="296" x2="366" y2="356" stroke="#1fa65a" stroke-width="2"/>
+<text x="240" y="323.0" text-anchor="middle" font-size="13">compute_hamiltonian()</text>
+<text x="240" y="339.0" text-anchor="middle" font-size="13">qbits → Hamiltonians (train, test)</text>
+<polyline points="240,356 240,394" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="394" width="280" height="50" fill="#fff" stroke="#999" stroke-width="2"/>
+<text x="240" y="416.0" text-anchor="middle" font-size="13">simulator_cls =</text>
+<text x="240" y="432.0" text-anchor="middle" font-size="13">SIMULATORS_DICT[backend]</text>
+<polyline points="240,444 240,482" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="482" width="280" height="60" fill="#fff" stroke="#1fa65a" stroke-width="2"/>
+<line x1="114" y1="482" x2="114" y2="542" stroke="#1fa65a" stroke-width="2"/>
+<line x1="366" y1="482" x2="366" y2="542" stroke="#1fa65a" stroke-width="2"/>
+<text x="240" y="509.0" text-anchor="middle" font-size="13">run_simulation()</text>
+<text x="240" y="525.0" text-anchor="middle" font-size="13">Hamiltonians → probabilities</text>
+<polyline points="240,542 240,580" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="240,580 410,625.0 240,670 70,625.0" fill="#fff" stroke="#4a90d9" stroke-width="2"/>
+<text x="240" y="630.0" text-anchor="middle" font-size="13">excitations?</text>
+<text x="248" y="688" font-size="12" font-weight="bold">Yes</text>
+<polyline points="240,670 240,700" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="700" width="280" height="50" fill="#fff" stroke="#999" stroke-width="2"/>
+<text x="240" y="722.0" text-anchor="middle" font-size="13">compute_excitation_count()</text>
+<text x="240" y="738.0" text-anchor="middle" font-size="13">probabilities → excitation counts</text>
+<polyline points="410,625 460,625 460,801 380,801" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<text x="416" y="618" font-size="12" font-weight="bold">No</text>
+<polyline points="240,750 240,776" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="776" width="280" height="50" fill="#fff" stroke="#1fa65a" stroke-width="2"/>
+<line x1="114" y1="776" x2="114" y2="826" stroke="#1fa65a" stroke-width="2"/>
+<line x1="366" y1="776" x2="366" y2="826" stroke="#1fa65a" stroke-width="2"/>
+<text x="240" y="798.0" text-anchor="middle" font-size="13">compute_kernel()</text>
+<text x="240" y="814.0" text-anchor="middle" font-size="13">Gram matrices (train, test)</text>
+<polyline points="240,826 240,864" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="864" width="280" height="50" fill="#fff" stroke="#999" stroke-width="2"/>
+<text x="240" y="886.0" text-anchor="middle" font-size="13">model_cls =</text>
+<text x="240" y="902.0" text-anchor="middle" font-size="13">MODELS_DICT[type]</text>
+<polyline points="240,914 240,952" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="952" width="280" height="60" fill="#fff" stroke="#1fa65a" stroke-width="2"/>
+<line x1="114" y1="952" x2="114" y2="1012" stroke="#1fa65a" stroke-width="2"/>
+<line x1="366" y1="952" x2="366" y2="1012" stroke="#1fa65a" stroke-width="2"/>
+<text x="240" y="979.0" text-anchor="middle" font-size="13">run_model()</text>
+<text x="240" y="995.0" text-anchor="middle" font-size="13">SVM train, accuracies, predictions</text>
+<polyline points="240,1012 240,1050" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="1050" width="280" height="44" fill="#fff" stroke="#999" stroke-width="2"/>
+<text x="240" y="1077.0" text-anchor="middle" font-size="13">self.time = elapsed</text>
+<polyline points="240,1094 240,1132" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="1132" width="280" height="50" fill="#fff" stroke="#1fa65a" stroke-width="2"/>
+<line x1="114" y1="1132" x2="114" y2="1182" stroke="#1fa65a" stroke-width="2"/>
+<line x1="366" y1="1132" x2="366" y2="1182" stroke="#1fa65a" stroke-width="2"/>
+<text x="240" y="1162.0" text-anchor="middle" font-size="13">save_results(path, name)</text>
+<polyline points="240,1182 240,1220" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<polygon points="122,1220 402,1220 358,1276 78,1276" fill="#fff" stroke="#f0b400" stroke-width="2"/>
+<text x="240" y="1245.0" text-anchor="middle" font-size="13">results JSON</text>
+<text x="240" y="1261.0" text-anchor="middle" font-size="13">args, accuracies, labels, time</text>
+<polyline points="240,1276 240,1314" fill="none" stroke="#000" stroke-width="1.6" marker-end="url(#a)"/>
+<rect x="100" y="1314" width="280" height="44" rx="22" fill="#fff" stroke="#e8833a" stroke-width="2"/>
+<text x="240" y="1341.0" text-anchor="middle" font-size="13">End</text>
+</svg>
