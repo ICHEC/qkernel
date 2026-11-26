@@ -101,7 +101,7 @@ def plot_label_grid_with_points(
     figsize: Tuple[float, float] = (8, 8),
     legend_loc: str = "upper left",
     draw_squares: bool = False,
-    n_convoluted_side: int = 2,
+    patch_side: int = 2,
     ax: Optional[plt.Axes] = None,
 ) -> None:
     """
@@ -112,7 +112,7 @@ def plot_label_grid_with_points(
     df : pd.DataFrame
         DataFrame containing label, latitude rank and longitude rank columns,
         sorted by latitude rank and then longitude rank. The points must lie
-        on a square grid, as in the `df` attribute of `ConvolutionalEncoding`.
+        on a square grid, as in the `df` attribute of `SpatialPatchEncoding`.
     label_col : str
         Name of the column containing label values, which must start at 1.
     lat_col : str
@@ -132,9 +132,9 @@ def plot_label_grid_with_points(
     legend_loc : str
         Location of the legend.
     draw_squares : bool
-        Whether to outline the blocks of points used by the convolution.
-    n_convoluted_side : int
-        Number of points on each side of the outlined blocks.
+        Whether to outline the patches of the spatial patch encoding.
+    patch_side : int
+        Number of points on each side of the outlined patches.
     ax : matplotlib.axes.Axes, optional
         Axes to plot on. If None, a new figure of size `figsize` is created and
         shown; otherwise `figsize` is ignored and nothing is shown.
@@ -181,12 +181,12 @@ def plot_label_grid_with_points(
 
     if draw_squares:
         # Outline each block of the grid
-        for i in range(0, num_points_per_side, n_convoluted_side):
-            for j in range(0, num_points_per_side, n_convoluted_side):
+        for i in range(0, num_points_per_side, patch_side):
+            for j in range(0, num_points_per_side, patch_side):
                 rect = mpatches.Rectangle(
                     (j, i),  # bottom-left corner
-                    n_convoluted_side - 1,
-                    n_convoluted_side - 1,
+                    patch_side - 1,
+                    patch_side - 1,
                     linewidth=2,
                     edgecolor="black",
                     facecolor="none",

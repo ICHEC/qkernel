@@ -31,7 +31,7 @@ This project uses [uv](https://docs.astral.sh/uv/) for dependency management.
 The source code is contained in `qkernel`. Some of the more important files in there are: 
 
 
-- `encodings/`: Classes for encoding data into qubit positions (chain, radial and convolutional encodings). 
+- `encodings/`: Classes for encoding data into qubit positions (chain, radial and spatial patch encodings). 
 - `hamiltonian.py`: Class for hamiltonian construction out of graphs. 
 - `kernel.py`: Class for generating kernels out of probability distributions.
 - `model.py`: Class for implementing kernel models. 

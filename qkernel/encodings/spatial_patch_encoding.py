@@ -7,15 +7,18 @@ from ..utils import majority_vote, normalise_array
 from .base import Encoding
 
 
-class ConvolutionalEncoding(Encoding):
+class SpatialPatchEncoding(Encoding):
     """
-    Convolutional encoding for transforming spatial + spectral data into
+    Spatial patch encoding for transforming spatial + spectral data into
     graph-like structures for quantum analog processing.
+
+    Neighbouring points are grouped into non-overlapping square patches, and each
+    patch forms one graph.
     """
 
     def __init__(self, df: pd.DataFrame) -> None:
         """
-        Initialise convolutional encoding.
+        Initialise spatial patch encoding.
 
         Parameters
         ----------
@@ -47,42 +50,42 @@ class ConvolutionalEncoding(Encoding):
         self.df["lon_rank"] = rankdata(self.df["longitude"], method="dense") - 1
         self.df.sort_values(by=["lat_rank", "lon_rank"], inplace=True)
 
-    def convolute_in_squares(self, n_convoluted_side: int = 2) -> None:
+    def split_into_patches(self, patch_side: int = 2) -> None:
         """
-        Convolutes data points in squares.
+        Splits the data points into square patches.
 
         Parameters
         ----------
-        n_convoluted_side : int
-            Number of points on each side of the square. (default is 2)
+        patch_side : int
+            Number of points on each side of the patch (default is 2).
         """
         n_grid_side = int(max(self.df["lat_rank"]) + 1)
-        convoluted_coordinates = []
-        convoluted_labels = []
+        patch_coordinates = []
+        patch_labels = []
 
-        for i in range(0, n_grid_side, n_convoluted_side):
-            for j in range(0, n_grid_side, n_convoluted_side):
+        for i in range(0, n_grid_side, patch_side):
+            for j in range(0, n_grid_side, patch_side):
                 mask = (
                     (self.df["lat_rank"] >= i)
-                    & (self.df["lat_rank"] < i + n_convoluted_side)
+                    & (self.df["lat_rank"] < i + patch_side)
                     & (self.df["lon_rank"] >= j)
-                    & (self.df["lon_rank"] < j + n_convoluted_side)
+                    & (self.df["lon_rank"] < j + patch_side)
                 )
 
-                convoluted_coordinates.append(
+                patch_coordinates.append(
                     np.stack(self.df["hsv_coordinates"][mask].to_numpy())
                 )
 
-                convoluted_labels.append(
+                patch_labels.append(
                     majority_vote(np.stack(self.df["label"][mask].to_numpy()))
                 )
 
-        self.convoluted_coordinates = np.stack(convoluted_coordinates)
-        self.labels = np.array(convoluted_labels)
+        self.patch_coordinates = np.stack(patch_coordinates)
+        self.labels = np.array(patch_labels)
 
     def encode(
         self,
-        n_convoluted_side: int = 2,
+        patch_side: int = 2,
         scaling: float = 37.0,
     ) -> np.ndarray:
         """
@@ -97,26 +100,26 @@ class ConvolutionalEncoding(Encoding):
 
         Parameters
         ----------
-        n_convoluted_side : int
-            Number of points on each side of the square (default is 2).
+        patch_side : int
+            Number of points on each side of the patch (default is 2).
         scaling : float
             Radial coordinate to apply to our coordinates. (default is 37).
 
         Returns
         -------
         np.ndarray
-            Graph coordinates of shape (n_graphs, n_convoluted_side**2, 2).
+            Graph coordinates of shape (n_graphs, patch_side**2, 2).
         """
-        self.convolute_in_squares(n_convoluted_side=n_convoluted_side)
-        _, M, _ = self.convoluted_coordinates.shape
+        self.split_into_patches(patch_side=patch_side)
+        _, M, _ = self.patch_coordinates.shape
 
-        unit_circle_division = (2 * np.pi) / (n_convoluted_side**2 * 2)
+        unit_circle_division = (2 * np.pi) / (patch_side**2 * 2)
 
         angles_normalised = np.mod(
-            self.convoluted_coordinates[:, :, 0], unit_circle_division
+            self.patch_coordinates[:, :, 0], unit_circle_division
         )
 
-        offsets = 2 * np.arange(n_convoluted_side**2) * unit_circle_division
+        offsets = 2 * np.arange(patch_side**2) * unit_circle_division
         offsets = offsets[:M]
 
         angles_divided = angles_normalised + offsets
