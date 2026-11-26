@@ -102,6 +102,7 @@ def plot_label_grid_with_points(
     legend_loc: str = "upper left",
     draw_squares: bool = False,
     n_convoluted_side: int = 2,
+    ax: Optional[plt.Axes] = None,
 ) -> None:
     """
     Plots a categorical label grid with overlaid scatter points.
@@ -134,6 +135,9 @@ def plot_label_grid_with_points(
         Whether to outline the blocks of points used by the convolution.
     n_convoluted_side : int
         Number of points on each side of the outlined blocks.
+    ax : matplotlib.axes.Axes, optional
+        Axes to plot on. If None, a new figure of size `figsize` is created and
+        shown; otherwise `figsize` is ignored and nothing is shown.
     """
     # Prepare the label grid
     num_points_per_side = int(np.sqrt(len(df)))  # assumes square grid
@@ -148,17 +152,19 @@ def plot_label_grid_with_points(
     color_indices = label_grid - 1  # map label 1->0, 2->1, etc.
 
     # Plot the grid
-    plt.figure(figsize=figsize)
-    plt.imshow(
+    show = ax is None
+    if show:
+        _, ax = plt.subplots(figsize=figsize)
+    ax.imshow(
         color_indices,
         origin="lower",
         cmap=ListedColormap(colors),
         vmin=-0.5,
         vmax=num_labels - 0.5,
     )
-    plt.xlabel("Longitude Rank")
-    plt.ylabel("Latitude Rank")
-    plt.title("Label Grid")
+    ax.set_xlabel("Longitude Rank")
+    ax.set_ylabel("Latitude Rank")
+    ax.set_title("Label Grid")
 
     # Add legend
     if label_names is None:
@@ -166,12 +172,12 @@ def plot_label_grid_with_points(
     legend_handles = [
         mpatches.Patch(color=colors[i], label=label_names[i]) for i in range(num_labels)
     ]
-    plt.legend(handles=legend_handles, loc=legend_loc)
+    ax.legend(handles=legend_handles, loc=legend_loc)
 
     # Scatter points
     lat = df[lat_col].to_numpy()
     lon = df[lon_col].to_numpy()
-    plt.scatter(lon, lat, color=point_color, s=point_size, edgecolor="white")
+    ax.scatter(lon, lat, color=point_color, s=point_size, edgecolor="white")
 
     if draw_squares:
         # Outline each block of the grid
@@ -185,9 +191,10 @@ def plot_label_grid_with_points(
                     edgecolor="black",
                     facecolor="none",
                 )
-                plt.gca().add_patch(rect)
+                ax.add_patch(rect)
 
-    plt.show()
+    if show:
+        plt.show()
 
 
 def check_embeddability(
