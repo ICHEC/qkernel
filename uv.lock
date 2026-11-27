@@ -1,15 +1,15 @@
 version = 1
-revision = 3
+revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
     "python_full_version >= '3.14' and sys_platform == 'emscripten'",
     "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'win32'",
-    "python_full_version < '3.13' and sys_platform == 'win32'",
     "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version < '3.13' and sys_platform == 'emscripten'",
     "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version < '3.13' and sys_platform == 'win32'",
+    "python_full_version < '3.13' and sys_platform == 'emscripten'",
     "python_full_version < '3.13' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
@@ -1293,7 +1293,7 @@ name = "pexpect"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "ptyprocess", marker = "sys_platform != 'emscripten' and sys_platform != 'win32'" },
+    { name = "ptyprocess" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce1f4d06852fc19a2f11d180f23dc32d9588bee2f149d/pexpect-4.9.0.tar.gz", hash = "sha256:ee7d41123f3c9911050ea2c2dac107568dc43b2d3b0c7557a33212c398ead30f", size = 166450, upload-time = "2023-11-25T09:07:26.339Z" }
 wheels = [
@@ -2015,11 +2015,12 @@ name = "qkernel"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "matplotlib" },
     { name = "myqlm" },
     { name = "numpy" },
     { name = "pandas" },
-    { name = "qkernel4eo" },
     { name = "qutip" },
+    { name = "scikit-image" },
     { name = "scikit-learn" },
     { name = "scipy" },
 ]
@@ -2032,11 +2033,12 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "matplotlib" },
     { name = "myqlm" },
     { name = "numpy" },
     { name = "pandas" },
-    { name = "qkernel4eo", git = "https://github.com/ICHEC/qkernel4eo" },
     { name = "qutip" },
+    { name = "scikit-image" },
     { name = "scikit-learn" },
     { name = "scipy" },
 ]
@@ -2045,17 +2047,6 @@ requires-dist = [
 dev = [
     { name = "ipykernel" },
     { name = "ruff" },
-]
-
-[[package]]
-name = "qkernel4eo"
-version = "0.0.1"
-source = { git = "https://github.com/ICHEC/qkernel4eo#1c8f0ab947a29434270317d3a7081a95fb0ab897" }
-dependencies = [
-    { name = "numpy" },
-    { name = "pandas" },
-    { name = "scikit-image" },
-    { name = "scipy" },
 ]
 
 [[package]]

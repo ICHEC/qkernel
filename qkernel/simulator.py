@@ -164,19 +164,19 @@ class QuTiPSimulator:
 
         return evolved_state.final_state.full()
 
-    def get_probabilities_list(self) -> List[np.ndarray]:
+    def get_probabilities_list(self) -> np.ndarray:
         """
         Compute probability distributions for all Hamiltonians.
 
         Returns
         -------
-        list of np.ndarray
-            List of probability distributions per Hamiltonian.
+        np.ndarray
+            Array of shape (n_samples, n_states) containing probabilities.
         """
         probabilities_list = []
 
         for hamiltonian in self.hamiltonians_list:
-            final_state = self._evolve_hamiltonian(hamiltonian)
-            probabilities_list.append(np.real(np.conj(final_state) * final_state))
+            final_state = self._evolve_hamiltonian(hamiltonian).ravel()
+            probabilities_list.append(np.abs(final_state) ** 2)
 
-        return probabilities_list
+        return np.array(probabilities_list)

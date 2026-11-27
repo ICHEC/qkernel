@@ -1,0 +1,53 @@
+{
+    "args": {
+        "hamiltonian": {
+            "backend": "qutip",
+            "kwargs": {
+                "omega": 6.283185307179586,
+                "delta": 0.3,
+                "c6": 865723.02
+            }
+        },
+        "simulator": {
+            "backend": "qutip",
+            "kwargs": {
+                "duration": 0.68
+            }
+        },
+        "kernel": {
+            "kwargs": {
+                "excitations": false,
+                "distance_fn": "exp",
+                "distance_kwargs": {
+                    "mu": 0.75
+                }
+            }
+        },
+        "model": {
+            "type": "svc",
+            "kwargs": {
+                "C": 0.9,
+                "tol": 0.02
+            }
+        },
+        "results": {
+            "path": "./",
+            "name": "experiment_trial"
+        }
+    },
+    "results": {
+        "train_accuracy": 0.5,
+        "test_accuracy": 0.5,
+        "predicted_labels": [
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2
+        ],
+        "time": 0.009298324584960938
+    }
+}
